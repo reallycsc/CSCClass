@@ -1,6 +1,6 @@
 #include "CSC_Encryption.h"
+#include "../CommonFunctions.h"
 #include "openssl/aes.h"
-#include <CSCClass/CommonFunctions.h>
 
 char* csc_encode_base64(const string& str_to_encode)
 {
