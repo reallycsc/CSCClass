@@ -40,6 +40,5 @@ private:
 	int	m_nCurBackgroundMusicIndex;
 
 	bool	m_bIsRandom;
-	bool	m_bIsMusicTitleShown;
 };
 NS_CSC_END

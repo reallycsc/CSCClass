@@ -14,7 +14,7 @@ AudioCtrl* AudioCtrl::getInstance()
 	return &_sharedContext;
 }
 
-AudioCtrl::AudioCtrl(): m_pSimpleAudioEngine(nullptr), m_nCurBackgroundMusicIndex(0), m_bIsListPlaying(false), m_bIsPause(false), m_bIsMute(false), m_bIsRandom(false), m_bIsMusicTitleShown(false)
+AudioCtrl::AudioCtrl(): m_pSimpleAudioEngine(nullptr), m_nCurBackgroundMusicIndex(0), m_bIsListPlaying(false), m_bIsPause(false), m_bIsMute(false), m_bIsRandom(false)
 {
 	m_vBackgroundMusics.clear();
 }
@@ -119,7 +119,8 @@ void AudioCtrl::update(float dt)
 void AudioCtrl::showMusicTitle(const string &music_fullname)
 {
 	auto scene = Director::getInstance()->getRunningScene();
-	CS_RETURN_IF(!scene || m_bIsMusicTitleShown);
+	CS_RETURN_IF(!scene);
+    CS_RETURN_IF(scene->getChildByName("music_bg"));
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	auto music_name = music_fullname.substr(0, music_fullname.find_last_of("."));
@@ -139,13 +140,11 @@ void AudioCtrl::showMusicTitle(const string &music_fullname)
 		MoveTo::create(0.5f, pos_start),
 		CallFunc::create([=]()->void 
 	{
-		music_title->removeFromParent();
-		m_bIsMusicTitleShown = false;
+		bg->removeFromParent();
 	}),
 		NULL));
 
-	scene->addChild(bg);
-	m_bIsMusicTitleShown = true;
+	scene->addChild(bg,1,"music_bg");
 }
 
 NS_CSC_END
