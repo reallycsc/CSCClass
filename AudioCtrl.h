@@ -19,16 +19,19 @@ public:
 	void stopBackgroundMusic();
 	void pauseBackgroundMusic();
 	void resumeBackgroundMusic();
+	void muteBackgroundMusic();
 
 	// getter
 	vector<string>* getBackgroundMusicList() {return &m_vBackgroundMusics;}
 
 private:
 	void update(float dt);
+	inline void showMusicTitle(const string &music_fullname);
 
 public:
 	CC_SYNTHESIZE(bool, m_bIsListPlaying, IsListPlaying);
 	CC_SYNTHESIZE(bool, m_bIsPause, IsPause);
+	CC_SYNTHESIZE(bool, m_bIsMute, IsMute);
 
 private:
 	CocosDenshion::SimpleAudioEngine*	m_pSimpleAudioEngine;
@@ -37,5 +40,6 @@ private:
 	int	m_nCurBackgroundMusicIndex;
 
 	bool	m_bIsRandom;
+	bool	m_bIsMusicTitleShown;
 };
 NS_CSC_END
