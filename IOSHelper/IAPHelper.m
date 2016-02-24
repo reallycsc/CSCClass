@@ -26,11 +26,12 @@
 
 @implementation IAPHelper
 
-- (id)initWithProductIdentifiers:(NSSet *)productIdentifiers {
+- (id)initWithProductIdentifiers:(NSSet *)productIdentifiers AndConsumable:(NSDictionary *)consumables{
     if ((self = [super init])) {
         
         // Store product identifiers
         _productIdentifiers = productIdentifiers;
+        _productConsumables = consumables;
         
         // Check for previously purchased products
         NSMutableSet * purchasedProducts = [NSMutableSet set];
@@ -38,15 +39,20 @@
             
             BOOL productPurchased = NO;
             
-            NSString* password = [SFHFKeychainUtils getPasswordForUsername:productIdentifier andServiceName:@"IAPHelper" error:nil];
-            if([password isEqualToString:@"YES"])
-            {
-                productPurchased = YES;
-            }
-            
-            if (productPurchased) {
-                [purchasedProducts addObject:productIdentifier];
+            if ([[_productConsumables objectForKey : productIdentifier] boolValue] == NO) {
+                NSString* password = [SFHFKeychainUtils getPasswordForUsername:productIdentifier andServiceName:@"IAPHelper" error:nil];
+                if([password isEqualToString:@"YES"])
+                {
+                    productPurchased = YES;
+                }
                 
+                if (productPurchased) {
+                    [purchasedProducts addObject:productIdentifier];
+                    
+                }
+            }
+            else {
+                [self clearSavedPurchasedProductByID : productIdentifier];
             }
         }
         if ([SKPaymentQueue defaultQueue]) {
@@ -71,10 +77,15 @@
 
     BOOL productPurchased = NO;
     
-    NSString* password = [SFHFKeychainUtils getPasswordForUsername:productID andServiceName:@"IAPHelper" error:nil];
-    if([password isEqualToString:@"YES"])
-    {
-        productPurchased = YES;
+    if ([[_productConsumables objectForKey : productID] boolValue] == NO) {
+        NSString* password = [SFHFKeychainUtils getPasswordForUsername:productID andServiceName:@"IAPHelper" error:nil];
+        if([password isEqualToString:@"YES"])
+        {
+            productPurchased = YES;
+        }
+    }
+    else {
+        [self clearSavedPurchasedProductByID : productID];
     }
 
     return productPurchased;

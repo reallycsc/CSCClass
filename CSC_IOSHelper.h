@@ -25,7 +25,7 @@ public:
 	static void GameCenter_resetAchievements();
 
 	// IAP
-	static void IAP_initWithProductSet(vector<string>* products); // init
+	static void IAP_initWithProductSet(vector<pair<string,bool>>* products); // init
 
 	static void IAP_requestAllPurchasedProducts(bool isTest);
     void IAP_requestAllPurchasedProductsWithCallback(bool isTest, const function<void()> &func);

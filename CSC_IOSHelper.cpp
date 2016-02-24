@@ -105,17 +105,22 @@ void CSC_IOSHelper::GameCenter_resetAchievements()
 }
 
 /////////////////////////// IAP ///////////////////////////
-void CSC_IOSHelper::IAP_initWithProductSet(vector<string>* products)
+void CSC_IOSHelper::IAP_initWithProductSet(vector<pair<string,BOOL>>* products)
 {
 	int count = (int)products->size();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (![IAPShare sharedHelper].iap) {
 		NSMutableSet  *productIdentifiers = [NSMutableSet setWithCapacity : count];
+        NSMutableDictionary  *productConsumables = [NSMutableDictionary dictionaryWithCapacity : count];
 		for (size_t i = 0; i < count; i++)
 		{
-			[productIdentifiers addObject : [[NSString alloc] initWithUTF8String:products->at(i).c_str()]];
+            NSString *productIdentifier = [[NSString alloc] initWithUTF8String:products->at(i).first.c_str()];
+			[productIdentifiers addObject : productIdentifier];
+            [productConsumables setObject : [NSNumber numberWithBool:products->at(i).second]
+                                    forKey: productIdentifier];
 		}
-		[IAPShare sharedHelper].iap = [[IAPHelper alloc] initWithProductIdentifiers:productIdentifiers];
+		[IAPShare sharedHelper].iap = [[IAPHelper alloc] initWithProductIdentifiers:productIdentifiers
+                                                                      AndConsumable:productConsumables];
 	}
 #endif
 }

@@ -66,9 +66,9 @@ static IAPShare * _sharedHelper;
                   Interaction : FALSE];
             [_iap buyProductOnCompletion:skProduct
                             onCompletion:^(SKPaymentTransaction *transcation) {
-                                [ProgressHUD dismiss];
                                 if (transcation.error) {
                                     NSLog(@"Fail %@",[transcation.error localizedDescription]);
+                                    [ProgressHUD showError : [transcation.error localizedDescription]];
                                 }
                                 else if (transcation.transactionState == SKPaymentTransactionStatePurchased) {
                                     [ProgressHUD show : @"Checking receipt from Apple.inc, please wait…"
@@ -81,6 +81,7 @@ static IAPShare * _sharedHelper;
                                                    //Convert JSON String to NSDictionary
                                                    NSDictionary* rec = [IAPShare toJSON : response];
                                                    if ([rec[@"status"] integerValue] == 0) {
+                                                       [ProgressHUD dismiss];
                                                        [_iap provideContentWithTransaction : transcation];
                                                        NSLog(@"SUCCESS %@",response);
                                                        NSLog(@"Pruchases %@",_iap.purchasedProducts);
