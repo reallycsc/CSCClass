@@ -105,7 +105,7 @@ void CSC_IOSHelper::GameCenter_resetAchievements()
 }
 
 /////////////////////////// IAP ///////////////////////////
-void CSC_IOSHelper::IAP_initWithProductSet(vector<pair<string,BOOL>>* products)
+void CSC_IOSHelper::IAP_initWithProductSet(vector<pair<string, bool>>* products)
 {
 	int count = (int)products->size();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
